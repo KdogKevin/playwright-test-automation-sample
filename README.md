@@ -30,15 +30,16 @@ src/
   data/         Test data and the practice sites' published demo accounts
   fixtures.ts   Shared setup, such as a shopper who is already logged in
 tests/
-  ui/           Browser tests (Chromium)
+  ui/           Browser tests, run in Chromium, Firefox, WebKit (Safari), and a mobile viewport
   api/          API tests (no browser needed)
-.github/workflows/tests.yml   CI: type check, then UI and API suites in parallel
+.github/workflows/tests.yml   CI: static checks, then each browser and the API suite in parallel
 ```
 
 Choices worth noting:
 
 - **Stable selectors.** Tests find elements by `data-test` attributes, not CSS classes or text that designers change.
 - **Independent tests.** Each test sets up its own data, so they run in parallel and in any order.
+- **Every browser your users have.** The same UI suite runs in Chromium, Firefox, WebKit (Safari), and a Pixel 7 phone viewport, each as its own CI job.
 - **Failures you can debug.** Failed tests keep a trace, screenshot, and video, uploaded with the HTML report.
 - **Mistakes caught before review.** ESLint with Playwright's rules flags missing `await`s and non-retrying assertions, and Prettier keeps formatting out of code review.
 - **Known bugs stay visible.** The API defect uses `test.fail()`. CI stays green while the bug exists and turns red when it's fixed, so the test gets updated.
@@ -49,9 +50,10 @@ Requires Node.js 20 or newer.
 
 ```bash
 npm ci
-npx playwright install chromium
+npx playwright install chromium firefox webkit
 npm test            # everything
-npm run test:ui     # browser tests only
+npm run test:ui     # browser tests in all four browsers and devices
+npm run test:chromium  # browser tests in Chromium only (fastest)
 npm run test:api    # API tests only
 npm run report      # open the HTML report
 npm run lint        # ESLint with Playwright's recommended rules
