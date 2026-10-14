@@ -13,13 +13,13 @@ By Kevin Nguyen, test automation and QA consulting · hello@kcnguyen.com
 
 ## What's covered
 
-| Area | Tests |
-| --- | --- |
-| Login | Valid login, wrong password, locked-out account, protected pages need a login |
-| Cart | Badge count as items are added and removed, cart survives a reload, sorting by price and by name |
-| Checkout | Full purchase of two items, subtotal matches item prices, required-field validation |
-| Booking API | Create and read, update with a token, update refused without one, delete, bad credentials |
-| Known defect | A missing required field returns 500 instead of 400, kept as a living bug report |
+| Area         | Tests                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| Login        | Valid login, wrong password, locked-out account, protected pages need a login                    |
+| Cart         | Badge count as items are added and removed, cart survives a reload, sorting by price and by name |
+| Checkout     | Full purchase of two items, subtotal matches item prices, required-field validation              |
+| Booking API  | Create and read, update with a token, update refused without one, delete, bad credentials        |
+| Known defect | A missing required field returns 500 instead of 400, kept as a living bug report                 |
 
 ## How it's built
 
@@ -40,6 +40,7 @@ Choices worth noting:
 - **Stable selectors.** Tests find elements by `data-test` attributes, not CSS classes or text that designers change.
 - **Independent tests.** Each test sets up its own data, so they run in parallel and in any order.
 - **Failures you can debug.** Failed tests keep a trace, screenshot, and video, uploaded with the HTML report.
+- **Mistakes caught before review.** ESLint with Playwright's rules flags missing `await`s and non-retrying assertions, and Prettier keeps formatting out of code review.
 - **Known bugs stay visible.** The API defect uses `test.fail()`. CI stays green while the bug exists and turns red when it's fixed, so the test gets updated.
 
 ## Run it locally
@@ -53,6 +54,8 @@ npm test            # everything
 npm run test:ui     # browser tests only
 npm run test:api    # API tests only
 npm run report      # open the HTML report
+npm run lint        # ESLint with Playwright's recommended rules
+npm run format      # format with Prettier
 ```
 
 To point the suites at another environment, set `UI_BASE_URL` or `API_BASE_URL`.

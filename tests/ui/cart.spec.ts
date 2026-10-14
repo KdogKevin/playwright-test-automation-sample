@@ -29,6 +29,8 @@ test.describe('cart', () => {
   test('sorting by name Z to A orders the products', async ({ shop }) => {
     await shop.sortBy('za');
     const names = await shop.names.allTextContents();
-    expect(names).toEqual([...names].sort((a, b) => b.localeCompare(a)));
+    expect(names.length).toBeGreaterThan(1);
+    // Web-first assertion: retries until the rendered order matches, instead of reading once.
+    await expect(shop.names).toHaveText([...names].sort((a, b) => b.localeCompare(a)));
   });
 });
