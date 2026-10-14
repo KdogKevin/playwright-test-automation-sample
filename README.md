@@ -1,5 +1,7 @@
 # Playwright Test Automation Sample
 
+[![Tests](https://github.com/KdogKevin/playwright-test-automation-sample/actions/workflows/tests.yml/badge.svg)](https://github.com/KdogKevin/playwright-test-automation-sample/actions/workflows/tests.yml)
+
 A sample test suite showing how I set up test automation for a client: UI tests, API tests, and a CI pipeline that runs them on every pull request.
 
 It runs against two public practice targets built for testing, not client systems:
