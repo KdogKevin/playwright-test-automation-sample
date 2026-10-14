@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [ui, api]
+        suite: [chromium, firefox, webkit, mobile, api]
     steps:
       - uses: actions/checkout@v5
 
@@ -56,8 +56,8 @@ jobs:
         run: npm ci
 
       - name: Install browser
-        if: matrix.suite == 'ui'
-        run: npx playwright install --with-deps chromium
+        if: matrix.suite != 'api'
+        run: npx playwright install --with-deps ${{ matrix.suite == 'webkit' && 'webkit' || matrix.suite == 'firefox' && 'firefox' || 'chromium' }}
 
       - name: Run ${{ matrix.suite }} tests
         run: npx playwright test --project=${{ matrix.suite }}

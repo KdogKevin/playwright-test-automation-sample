@@ -1,6 +1,19 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, type Project } from '@playwright/test';
 
 const isCI = !!process.env.CI;
+
+/** The same UI suite, run once per browser or device. */
+function uiProject(name: string, device: (typeof devices)[string]): Project {
+  return {
+    name,
+    testDir: './tests/ui',
+    use: {
+      ...device,
+      baseURL: process.env.UI_BASE_URL ?? 'https://www.saucedemo.com',
+      testIdAttribute: 'data-test',
+    },
+  };
+}
 
 export default defineConfig({
   testDir: './tests',
@@ -18,15 +31,10 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   projects: [
-    {
-      name: 'ui',
-      testDir: './tests/ui',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: process.env.UI_BASE_URL ?? 'https://www.saucedemo.com',
-        testIdAttribute: 'data-test',
-      },
-    },
+    uiProject('chromium', devices['Desktop Chrome']),
+    uiProject('firefox', devices['Desktop Firefox']),
+    uiProject('webkit', devices['Desktop Safari']),
+    uiProject('mobile', devices['Pixel 7']),
     {
       name: 'api',
       testDir: './tests/api',
